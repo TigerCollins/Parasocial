@@ -13,10 +13,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - GroundLayer
+  - Projectile
+  - Player
+  - Invisble
   - 
   - 
   - 
