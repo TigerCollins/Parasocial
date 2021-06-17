@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &864307920727352734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 864307920727352735}
+  m_Layer: 10
+  m_Name: ThrowPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &864307920727352735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864307920727352734}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.323, y: -0.654, z: 0.976}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1382420844116681215}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1382420842301525931
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +41,7 @@ GameObject:
   - component: {fileID: 1382420842301525935}
   - component: {fileID: 1382420842301525932}
   - component: {fileID: 1382420842301525933}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,13 +55,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382420842301525931}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.561, y: 0.37, z: 0}
-  m_LocalScale: {x: 0.178536, y: 0.178536, z: 0.178536}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.121, y: -0.38199997, z: 0.495}
+  m_LocalScale: {x: 0.17853597, y: 0.178536, z: 0.17853597}
   m_Children: []
-  m_Father: {fileID: 1382420842634052139}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_Father: {fileID: 1382420842762466045}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1382420842301525932
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -90,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382420842634052139}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Raycast holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,8 +137,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1382420842301525935}
+  m_Children: []
   m_Father: {fileID: 1382420843002077287}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -124,7 +153,7 @@ GameObject:
   - component: {fileID: 1382420842679023477}
   - component: {fileID: 1382420842679023474}
   - component: {fileID: 678535737}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -176,7 +205,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967231
+    m_Bits: 1847
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -222,7 +251,7 @@ GameObject:
   - component: {fileID: 1382420842699568962}
   - component: {fileID: 1382420842699568964}
   - component: {fileID: 1382420842699568965}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +330,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382420842762466045}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CameraHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,6 +349,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1382420842679023475}
+  - {fileID: 1382420842301525935}
   m_Father: {fileID: 1382420844116681215}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -332,7 +362,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382420843002077287}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerAvatarHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382420843625444336}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -398,7 +428,8 @@ GameObject:
   - component: {fileID: 1382420843928379806}
   - component: {fileID: 1382420843928379807}
   - component: {fileID: 3945612265140929669}
-  m_Layer: 0
+  - component: {fileID: 864307918932818236}
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +444,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382420843928379804}
   m_LocalRotation: {x: 0, y: 0.3641618, z: -0, w: -0.93133575}
-  m_LocalPosition: {x: -2.98, y: 0, z: -1.5299999}
+  m_LocalPosition: {x: 51.736786, y: -1.3467937, z: 43.697083}
   m_LocalScale: {x: 4.1232, y: 4.1232, z: 4.1232}
   m_Children:
   - {fileID: 1382420843002077287}
@@ -451,6 +482,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e7aff91ff98824db5e3bc1457d1791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPrefab: {fileID: 7900568442446985535, guid: 5d866716980640e428c75829bd6a95a3, type: 3}
+  throwObject: {fileID: 864307918932818236}
+  raycastIgnore1:
+    serializedVersion: 2
+    m_Bits: 512
+  raycastIgnore2:
+    serializedVersion: 2
+    m_Bits: 2048
   _characterController: {fileID: 1382420843928379806}
   _playerAvatarObject: {fileID: 1382420843002077284}
   _controlType: 2
@@ -489,16 +528,17 @@ MonoBehaviour:
   _currentMovement: {x: 0, y: 0, z: 0}
   _gravitySettings:
     useCustomGravity: 0
-    customGravityDetails: {x: 0, y: 0.2, z: 0}
+    customGravityDetails: {x: 0, y: -16.88, z: 0}
     previousGravityStrength: {x: 0, y: 0, z: 0}
     onCustomGravityStrengthChange:
       m_PersistentCalls:
         m_Calls: []
   _raycast:
-    useRaycast: 0
-    raycastPoint: {fileID: 0}
-    raycastDistance: 0
-    raycastColour: {r: 0, g: 0, b: 0, a: 0}
+    useRaycast: 1
+    raycastPoint: {fileID: 1382420842301525935}
+    raycastDistance: 100
+    raycastColour: {r: 0.8018868, g: 0.12482201, b: 0.12482201, a: 1}
+  _pushPower: 12.96
 --- !u!114 &3945612265140929669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,6 +642,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1382420843928379807}
+        m_TargetAssemblyTypeName: BasicMovementScript, Assembly-CSharp
+        m_MethodName: TrackMousePos
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: ce8cd114-ce71-4129-8582-7ae3b3ac7c60
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
@@ -636,11 +688,60 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9667febe-49b5-4b37-85c5-0cc6f8d5ae20
     m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1382420843928379807}
+        m_TargetAssemblyTypeName: BasicMovementScript, Assembly-CSharp
+        m_MethodName: Raycast
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 864307918932818236}
+        m_TargetAssemblyTypeName: ThrowObject, Assembly-CSharp
+        m_MethodName: ThrowRandomObject
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 674c4721-614f-41a8-9d02-a9c41f48ec99
+    m_ActionName: Player/Throw[/Mouse/press]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &864307918932818236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382420843928379804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c1e93a50c204d04d870ea8d4250cd2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleObjects:
+  - {fileID: 3786444505221983366, guid: 86f9cc3c390f03045bcaf59da0fc7e25, type: 3}
+  - {fileID: 1426845655246918925, guid: f2c9d7b1b2de96c44862e4e63807a0b1, type: 3}
+  - {fileID: 2636254574093644490, guid: e1a5d73fdb295174db60f87ea5c165fb, type: 3}
+  - {fileID: 5031402333450762001, guid: ebe169f6288a60147930aa69a8bc7e03, type: 3}
+  - {fileID: 8080241563166063321, guid: f8531608e44daa947b899e9c376a8758, type: 3}
+  thrownObjectHolder: {fileID: 0}
+  throwPoint: {fileID: 864307920727352735}
+  targetTransform: {fileID: 0}
 --- !u!1 &1382420844116681212
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +751,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382420844116681215}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CameraHolder - tilt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -669,6 +770,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1382420842762466045}
+  - {fileID: 864307920727352735}
   m_Father: {fileID: 1382420843002077287}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

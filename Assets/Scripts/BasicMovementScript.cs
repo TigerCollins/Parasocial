@@ -8,6 +8,12 @@ using UnityEngine.InputSystem; //Relates to the new input system and not the def
 public class BasicMovementScript : MonoBehaviour
 {
     public GameObject targetPrefab;
+    [SerializeField]
+    private ThrowObject throwObject;
+    [SerializeField]
+    private LayerMask raycastIgnore1;
+    [SerializeField]
+    private LayerMask raycastIgnore2;
 
     /// <summary>
     /// Visible to inspector
@@ -389,11 +395,19 @@ public class BasicMovementScript : MonoBehaviour
                 ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out hit, _raycast.raycastDistance) && context.performed)
                 {
-                    if (hit.collider)
+                   if (hit.collider && hit.collider.gameObject.layer != raycastIgnore1 && hit.collider.gameObject.layer != raycastIgnore2)
                     {
-                        Instantiate(targetPrefab, hit.point, Quaternion.identity);
-                    }
-                        
+                        GameObject newPoint = Instantiate(targetPrefab, hit.point, Quaternion.identity);
+                        throwObject.targetTransform = newPoint;
+                    }                       
+                }
+
+                //If nothing hit
+                else if(context.performed)
+                {
+                    GameObject newPoint = Instantiate(targetPrefab, ray.GetPoint(_raycast.raycastDistance), Quaternion.identity);
+                    throwObject.targetTransform = newPoint;
+                    
                 }
             }
 
