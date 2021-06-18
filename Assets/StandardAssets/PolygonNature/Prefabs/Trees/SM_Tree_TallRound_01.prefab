@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23006772114018222}
   - component: {fileID: 95285636826540082}
   - component: {fileID: 136832544877008902}
+  - component: {fileID: -5565890134388586337}
   m_Layer: 0
   m_Name: SM_Tree_TallRound_01
   m_TagString: Untagged
@@ -116,3 +117,19 @@ CapsuleCollider:
   m_Height: 3.907669
   m_Direction: 1
   m_Center: {x: 0, y: 1.6459765, z: 0}
+--- !u!208 &-5565890134388586337
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321852448560106}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.388, y: 3.1790001, z: 1.338}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.132, y: 3.0210001, z: -0.162}
+  m_TimeToStationary: 0.5

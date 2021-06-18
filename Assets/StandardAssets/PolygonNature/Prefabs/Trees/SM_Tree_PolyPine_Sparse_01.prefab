@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23725431401102444}
   - component: {fileID: 95446935966866668}
   - component: {fileID: 136025101390686076}
+  - component: {fileID: -8492361124816099916}
   m_Layer: 0
   m_Name: SM_Tree_PolyPine_Sparse_01
   m_TagString: Untagged
@@ -116,3 +117,19 @@ CapsuleCollider:
   m_Height: 3.907669
   m_Direction: 1
   m_Center: {x: 0, y: 1.6459765, z: 0}
+--- !u!208 &-8492361124816099916
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610073067313290}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.781, y: 3.966, z: 0.75100005}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.0050000004, y: 3.8290002, z: -0.006}
+  m_TimeToStationary: 0.5

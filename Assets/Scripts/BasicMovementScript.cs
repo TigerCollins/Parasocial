@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.AI;
 using UnityEngine.InputSystem; //Relates to the new input system and not the default unity system (as of Unity 2021.4)
 
 [RequireComponent(typeof(CharacterController))]
@@ -52,7 +53,11 @@ public class BasicMovementScript : MonoBehaviour
     public RaycastDetails _raycast;
     [SerializeField]
     private float _pushPower;
-   
+
+    [Header("None Player")]
+    [SerializeField]
+    BasicAI basicAI;
+    
 
 
     /// <summary>
@@ -87,7 +92,15 @@ public class BasicMovementScript : MonoBehaviour
         AwakeGravity();
         Cursor.lockState = CursorLockMode.Locked;
         SprintSetup();
+        if(!isPlayer && basicAI.useNavMeshOn)
+        {
+            basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
+            StartCoroutine(AutoChangeTargetLocation());
+
+        }
     }
+
+  
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -205,6 +218,20 @@ public class BasicMovementScript : MonoBehaviour
             Debug.DrawRay(_raycast.raycastPoint.position, _raycast.raycastPoint.forward * _raycast.raycastDistance, _raycast.raycastColour, Time.deltaTime);
             //Raycast();
         }
+
+    
+    }
+
+    public IEnumerator AutoChangeTargetLocation()
+    {
+        yield return new WaitForSeconds(1);
+        if(basicAI.navMeshAgent.remainingDistance >.95)
+        {
+            basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
+
+            StartCoroutine(AutoChangeTargetLocation());
+        }
+       
     }
 
     void FixedUpdate()
@@ -655,4 +682,12 @@ public class SprintDetails
     public float sprintMultiplier;
     public float fovMultiplier;
     public float fovLerpTime;
+}
+
+[System.Serializable]
+public class BasicAI
+{
+    public bool useNavMeshOn;
+    public Transform moveToTarget;
+    public NavMeshAgent navMeshAgent;
 }
