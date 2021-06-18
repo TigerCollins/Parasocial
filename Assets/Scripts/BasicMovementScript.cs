@@ -49,8 +49,7 @@ public class BasicMovementScript : MonoBehaviour
     private Vector3 _currentMovement; //debug purposes only
     [SerializeField]
     private GravityOptions _gravitySettings;
-    [SerializeField]
-    private RaycastDetails _raycast;
+    public RaycastDetails _raycast;
     [SerializeField]
     private float _pushPower;
    
@@ -92,26 +91,46 @@ public class BasicMovementScript : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if(hit.collider.TryGetComponent(out Projectile projectile))
+        {
+            if(!projectile.isInAnimation)
+            {
+                RigidBodyPhysics(hit);
+            }
+        }
+
+        else
+        {
+            RigidBodyPhysics(hit);
+        }
+
+        
+    }
+
+    public void RigidBodyPhysics(ControllerColliderHit hit)
+    {
         Rigidbody body = hit.collider.attachedRigidbody;
 
-        // no rigidbody
-        if (body == null || body.isKinematic)
-            return;
 
-        // We dont want to push objects below us
-        if (hit.moveDirection.y < -0.3f)
-            return;
+            // no rigidbody
+            if (body == null || body.isKinematic)
+                return;
 
-        // Calculate push direction from move direction,
-        // we only push objects to the sides never up and down
-        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+            // We dont want to push objects below us
+            if (hit.moveDirection.y< -0.3f)
+                return;
 
-        // If you know how fast your character is trying to move,
-        // then you can also multiply the push velocity by that.
+            // Calculate push direction from move direction,
+            // we only push objects to the sides never up and down
+            Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
 
-        // Apply the push
-        body.velocity = pushDir * _pushPower;
-    }
+    // If you know how fast your character is trying to move,
+    // then you can also multiply the push velocity by that.
+
+    // Apply the push
+    body.velocity = pushDir* _pushPower;
+
+}
 
     private void SprintSetup()
     {

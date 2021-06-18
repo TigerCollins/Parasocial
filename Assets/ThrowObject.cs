@@ -15,6 +15,10 @@ public class ThrowObject : MonoBehaviour
     public Transform thrownObjectHolder;
     public Transform throwPoint;
     public GameObject targetTransform;
+    [SerializeField]
+    private float throwHeight;
+    [SerializeField]
+    private float throwTime;
     // Start is called before the first frame update
 
 
@@ -26,9 +30,15 @@ public class ThrowObject : MonoBehaviour
              GameObject instantiatedObject = Instantiate( possibleObjects[selectedID],throwPoint.position, Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)), thrownObjectHolder);
             if(instantiatedObject.TryGetComponent(out  Projectile projectileScript))
             {
+                projectileScript.HasFinished = true;
                 projectileScript.targetTransform = targetTransform;
                 projectileScript.thrownObject = instantiatedObject;
-            }   
+                projectileScript.EffectiveHeight = throwHeight;
+                projectileScript.BaseAnimationTime = throwTime;
+                projectileScript.RaycastDistance = GetComponent<BasicMovementScript>()._raycast.raycastDistance;
+                projectileScript.HasFinished = false;
+
+            }
         }
     }
 }
