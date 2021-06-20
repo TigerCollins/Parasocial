@@ -84,6 +84,16 @@ public class BasicMovementScript : MonoBehaviour
     //cam tilt
     float currentTilt = 0f;
 
+    //time
+    [ReadOnly]
+    [SerializeField]
+    float distance;
+    [SerializeField]
+    float distanceThreshold;
+    bool canTriggerPathCoroutine;
+    Coroutine currentCoroutine;
+    public bool isVisible;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -219,18 +229,41 @@ public class BasicMovementScript : MonoBehaviour
             //Raycast();
         }
 
+        while (distance >= distanceThreshold && !isPlayer && basicAI.useNavMeshOn)
+        {
+            if(canTriggerPathCoroutine)
+            {
+               currentCoroutine = StartCoroutine(AutoChangeTargetLocation());
+            }
+        }
     
     }
 
     public IEnumerator AutoChangeTargetLocation()
     {
-        yield return new WaitForSeconds(1);
-        if(basicAI.navMeshAgent.remainingDistance >.95)
+        canTriggerPathCoroutine = false;
+        distance = Vector3.Distance(basicAI.moveToTarget.position, gameObject.transform.position);
+       
+           while (distance >= distanceThreshold)
         {
-            basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
+            isVisible = false;
 
-            StartCoroutine(AutoChangeTargetLocation());
+           // Debug.Log(distance);
+            distance = Vector3.Distance(basicAI.moveToTarget.position, gameObject.transform.position);
+            yield return new WaitForSeconds(3);
+            basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
+          //  currentCoroutine = StartCoroutine(AutoChangeTargetLocation());
         }
+            while (distance<= distanceThreshold)
+        {
+            distance = Vector3.Distance(basicAI.moveToTarget.position, gameObject.transform.position);
+
+            isVisible = true;
+            basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
+            yield return null;
+        }
+           
+        
        
     }
 

@@ -1350,6 +1350,8 @@ MonoBehaviour:
     useNavMeshOn: 0
     moveToTarget: {fileID: 0}
     navMeshAgent: {fileID: 0}
+  distance: 0
+  distanceThreshold: 100
 --- !u!143 &1382420843882025301
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1690,6 +1692,8 @@ MonoBehaviour:
     useNavMeshOn: 1
     moveToTarget: {fileID: 1382420843882025304}
     navMeshAgent: {fileID: 6305534750708063940}
+  distance: 0
+  distanceThreshold: 20
 --- !u!143 &6305534750708063937
 CharacterController:
   m_ObjectHideFlags: 0
