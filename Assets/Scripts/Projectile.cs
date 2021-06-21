@@ -6,19 +6,36 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
+    [SerializeField]
+    private Score scoreScript;
+
+    [Header("Throw Settings")]
     public ThrowObject throwObjectScript;
-    protected float Animation;
-    float animationTime = 3f;
+
     public GameObject targetTransform;
     public GameObject thrownObject;
     bool finished = false;
     public LayerMask playerLayer;
 
     [Space(5)]
-    float effectiveHeight;
-    float raycastDistance;
 
     public bool isInAnimation = true;
+
+    float effectiveHeight;
+    float raycastDistance;
+    protected float Animation;
+
+    float animationTime = 3f;
+
+
+
+    [Header("Enemy Interaction")]
+    [SerializeField]
+    private LayerMask enemyLayer;
+    [SerializeField]
+    private int scoreModifier;
+    [SerializeField]
+    private BasicMovementScript enemyScript;
 
 
     [SerializeField]
@@ -28,6 +45,7 @@ public class Projectile : MonoBehaviour
     {
         HasFinished = true;
         throwObjectScript = FindObjectOfType<ThrowObject>();
+        scoreScript = FindObjectOfType<Score>();
         if(rb == null && TryGetComponent(out Rigidbody newRB))
         {
             rb = newRB;
@@ -109,6 +127,14 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(collision.gameObject.TryGetComponent(out BasicMovementScript basicMovementScript) && collision.gameObject.layer != enemyLayer && finished != false)
+        {
+            finished = true;
+            scoreScript.SubscriberCount += scoreModifier;
+            enemyScript = basicMovementScript;
+            basicMovementScript.StartStunCoroutine();
+        }
+       
         if(finished == false && collision.collider.gameObject.layer != gameObject.layer && collision.collider.gameObject.layer != playerLayer)
         {
             rb.isKinematic = false;

@@ -57,6 +57,10 @@ public class BasicMovementScript : MonoBehaviour
     [Header("None Player")]
     [SerializeField]
     BasicAI basicAI;
+    [SerializeField]
+    float stunTime;
+    float originalSpeed;
+    Coroutine stunCoroutine;
     
 
 
@@ -106,7 +110,7 @@ public class BasicMovementScript : MonoBehaviour
         {
             basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
             StartCoroutine(AutoChangeTargetLocation());
-
+            originalSpeed = basicAI.navMeshAgent.speed;
         }
     }
 
@@ -157,9 +161,12 @@ public class BasicMovementScript : MonoBehaviour
 
     private void SprintSetup()
     {
-        if(isPlayer)
-        baseFOV = _firstPersonControl.firstPersonCamera.fieldOfView;
-        newFOV = baseFOV;
+        if(isPlayer == true)
+        {
+            baseFOV = _firstPersonControl.firstPersonCamera.fieldOfView;
+            newFOV = baseFOV;
+        }
+       
     }
 
     public enum ControlTypeEnum
@@ -229,7 +236,7 @@ public class BasicMovementScript : MonoBehaviour
             //Raycast();
         }
 
-        while (distance >= distanceThreshold && !isPlayer && basicAI.useNavMeshOn)
+        if (distance >= distanceThreshold && !isPlayer && basicAI.useNavMeshOn)
         {
             if(canTriggerPathCoroutine)
             {
@@ -405,7 +412,7 @@ public class BasicMovementScript : MonoBehaviour
 
     public void CameraTilter()
     {
-        if (_controlType == ControlTypeEnum.FirstPerson)
+        if (_controlType == ControlTypeEnum.FirstPerson && isPlayer == true)
         {
           //  localTilt = 0;
 
@@ -510,47 +517,51 @@ public class BasicMovementScript : MonoBehaviour
 
     void Movement(Vector2 _inputTranslation)
     {
-        //Sets up movement
-        _horizontalAxis = _inputTranslation.x;
-        _verticalAxis = _inputTranslation.y;
-
-        //Sets up Rotation
-        Vector3 _rotationDirection;
-        float rotationX = -_inputTranslation.x;
-        float rotationY = _inputTranslation.y;
-
-        //Sets movement and then calls rotation function
-        switch (_controlType)
+        if(isPlayer == true)
         {
-            case ControlTypeEnum.SideScroller:
-                desiredMovementDirection = Vector3.ClampMagnitude(new Vector3(_horizontalAxis, 0, 0), _movementControl.maxMovementClamp);
-                _rotationDirection = Vector3.ClampMagnitude(new Vector3(0, 0, rotationX), _movementControl.maxMovementClamp);
-                _characterController.Move(desiredMovementDirection * Time.deltaTime * MovementMultiplier * actualSprintMultipler);
-                MovementRotation(_rotationDirection);
-                break;
-            case ControlTypeEnum.Topdown:
-                desiredMovementDirection = Vector3.ClampMagnitude(new Vector3(_horizontalAxis, 0, _verticalAxis), _movementControl.maxMovementClamp);
-                _rotationDirection = Vector3.ClampMagnitude(new Vector3(rotationY, 0, rotationX), _movementControl.maxMovementClamp);
-                _characterController.Move(desiredMovementDirection * Time.deltaTime * MovementMultiplier * actualSprintMultipler);
-                MovementRotation(_rotationDirection);
-                break;
-            case ControlTypeEnum.FirstPerson:
-                if (_firstPersonControl.firstPersonCamera != null)
-                {
-                    // Vector3 camera
-                    desiredMovementDirection = _firstPersonControl.firstPersonCamera.transform.right * _horizontalAxis + _firstPersonControl.firstPersonCamera.transform.parent.transform.forward * _verticalAxis;
+            //Sets up movement
+            _horizontalAxis = _inputTranslation.x;
+            _verticalAxis = _inputTranslation.y;
+
+            //Sets up Rotation
+            Vector3 _rotationDirection;
+            float rotationX = -_inputTranslation.x;
+            float rotationY = _inputTranslation.y;
+
+            //Sets movement and then calls rotation function
+            switch (_controlType)
+            {
+                case ControlTypeEnum.SideScroller:
+                    desiredMovementDirection = Vector3.ClampMagnitude(new Vector3(_horizontalAxis, 0, 0), _movementControl.maxMovementClamp);
+                    _rotationDirection = Vector3.ClampMagnitude(new Vector3(0, 0, rotationX), _movementControl.maxMovementClamp);
                     _characterController.Move(desiredMovementDirection * Time.deltaTime * MovementMultiplier * actualSprintMultipler);
-                }
+                    MovementRotation(_rotationDirection);
+                    break;
+                case ControlTypeEnum.Topdown:
+                    desiredMovementDirection = Vector3.ClampMagnitude(new Vector3(_horizontalAxis, 0, _verticalAxis), _movementControl.maxMovementClamp);
+                    _rotationDirection = Vector3.ClampMagnitude(new Vector3(rotationY, 0, rotationX), _movementControl.maxMovementClamp);
+                    _characterController.Move(desiredMovementDirection * Time.deltaTime * MovementMultiplier * actualSprintMultipler);
+                    MovementRotation(_rotationDirection);
+                    break;
+                case ControlTypeEnum.FirstPerson:
+                    if (_firstPersonControl.firstPersonCamera != null)
+                    {
+                        // Vector3 camera
+                        desiredMovementDirection = _firstPersonControl.firstPersonCamera.transform.right * _horizontalAxis + _firstPersonControl.firstPersonCamera.transform.parent.transform.forward * _verticalAxis;
+                        _characterController.Move(desiredMovementDirection * Time.deltaTime * MovementMultiplier * actualSprintMultipler);
+                    }
 
-                else
-                {
-                    Debug.LogError("Couldn't find first person camera, assign the missing variable.");
-                }
+                    else
+                    {
+                        Debug.LogError("Couldn't find first person camera, assign the missing variable.");
+                    }
 
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
         }
+       
     }
 
     void MovementRotation(Vector3 _desiredMoveDirection)
@@ -604,7 +615,7 @@ public class BasicMovementScript : MonoBehaviour
 
     public void FOVLerp()
     {
-        if(_controlType == ControlTypeEnum.FirstPerson)
+        if(_controlType == ControlTypeEnum.FirstPerson && isPlayer == true)
         {
             if(_movementControl.moveAxis.y > 0 && isSprinting)
             {
@@ -618,6 +629,22 @@ public class BasicMovementScript : MonoBehaviour
 
             }
         }
+    }
+
+    public void StartStunCoroutine()
+    {
+        if(stunCoroutine != null)
+        {
+            StopCoroutine(stunCoroutine);
+        }
+        stunCoroutine = StartCoroutine(Stun());
+    }
+
+    IEnumerator Stun()
+    {
+        basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 8;
+        yield return new WaitForSeconds(stunTime);
+        basicAI.navMeshAgent.speed = originalSpeed;
     }
 }
 
