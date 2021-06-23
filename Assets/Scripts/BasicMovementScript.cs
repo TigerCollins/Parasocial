@@ -126,7 +126,12 @@ public class BasicMovementScript : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if(hit.collider.TryGetComponent(out Projectile projectile))
+        if (!isPlayer && hit.collider.TryGetComponent(out PlayerState playerState))
+        {
+            StartCoroutine(playerState.GameOverScreen());
+        }
+
+        if (hit.collider.TryGetComponent(out Projectile projectile))
         {
             if(!projectile.isInAnimation)
             {
@@ -138,6 +143,8 @@ public class BasicMovementScript : MonoBehaviour
         {
             RigidBodyPhysics(hit);
         }
+
+      
 
         
     }
@@ -266,8 +273,8 @@ public class BasicMovementScript : MonoBehaviour
     {
         canTriggerPathCoroutine = false;
         distance = Vector3.Distance(basicAI.moveToTarget.position, gameObject.transform.position);
-       
-           while (distance >= distanceThreshold)
+
+        while (distance > distanceThreshold)
         {
             isVisible = false;
 
@@ -277,7 +284,7 @@ public class BasicMovementScript : MonoBehaviour
             basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
           //  currentCoroutine = StartCoroutine(AutoChangeTargetLocation());
         }
-            while (distance<= distanceThreshold)
+            while (distance< distanceThreshold)
         {
             distance = Vector3.Distance(basicAI.moveToTarget.position, gameObject.transform.position);
 
@@ -285,8 +292,8 @@ public class BasicMovementScript : MonoBehaviour
             basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
             yield return null;
         }
-           
-        
+
+        StartCoroutine(AutoChangeTargetLocation());
        
     }
 

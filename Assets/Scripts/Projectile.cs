@@ -25,8 +25,9 @@ public class Projectile : MonoBehaviour
 
     float effectiveHeight;
     float raycastDistance;
-    protected float Animation;
+    protected float Animation = 0;
 
+    [SerializeField]
     float animationTime = 3f;
 
 
@@ -42,17 +43,21 @@ public class Projectile : MonoBehaviour
 
     [SerializeField]
     private Rigidbody rb;
+    Vector3 startingPos;
     // Start is called before the first frame update
     void Awake()
     {
-        HasFinished = true;
+        HasFinished = false;
         throwObjectScript = FindObjectOfType<ThrowObject>();
         scoreScript = FindObjectOfType<Score>();
         if(rb == null && TryGetComponent(out Rigidbody newRB))
         {
             rb = newRB;
         }
-        rb.isKinematic = true;
+       rb.isKinematic = true;
+        startingPos = transform.position;
+        Animation = 0;
+        StartCoroutine(NewAnimation());
     }
 
     public float EffectiveHeight
@@ -64,7 +69,7 @@ public class Projectile : MonoBehaviour
 
         set
         {
-            effectiveHeight = value * Vector3.Distance(targetTransform.transform.position, throwObjectScript.throwPoint.transform.position) / 10f;
+            effectiveHeight = value * Vector3.Distance(targetTransform.transform.position, startingPos) / 10f;
         }
     }
 
@@ -104,48 +109,57 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    public IEnumerator NewAnimation()
+    {
+        while(Animation < BaseAnimationTime && finished == false)
+        {
+            if (thrownObject != null && targetTransform != null && finished == false)
+            {
+                Animation += Time.deltaTime / Vector3.Distance(targetTransform.transform.position, startingPos) * RaycastDistance;
+          
+                thrownObject.transform.position = MathParabola.Parabola(startingPos, targetTransform.transform.position, EffectiveHeight, Animation / BaseAnimationTime);
+            }
+            yield return null;
+        }
 
+        rb.isKinematic = false;
+        finished = true;
+        isInAnimation = false;
+        hasTriggered = true;
+
+     
+    }
     // Update is called once per frame
     void Update()
     {
-        if(Animation <= animationTime && finished == false)
-        {
-            Animation += Time.deltaTime / Vector3.Distance(targetTransform.transform.position, throwObjectScript.throwPoint.transform.position) * RaycastDistance ;
-        }
-        else if(rb.isKinematic && finished == false)
-        {
-            rb.isKinematic = false;
-            finished = true;
-            isInAnimation = false;
-        }
 
         //Animation = Animation % animationTime;
 
-        if (thrownObject != null && targetTransform != null && finished == false)
-        {
-            thrownObject.transform.position = MathParabola.Parabola(throwObjectScript.throwPoint.transform.position, targetTransform.transform.position, EffectiveHeight, Animation / BaseAnimationTime );
-        }
+        
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.TryGetComponent(out BasicMovementScript basicMovementScript) && collision.gameObject.layer != enemyLayer && finished != false)
+        if(collision.gameObject.TryGetComponent(out BasicMovementScript basicMovementScript) && collision.gameObject.layer == 12 && finished != true)
         {
-            if(!basicMovementScript.isPlayer)
+            if(!basicMovementScript.isPlayer && hasTriggered == false)
             {
-                finished = true;
+                hasTriggered = true;
+             HasFinished = true;
                 scoreScript.SubscriberCount += scoreModifier;
                 enemyScript = basicMovementScript;
                 basicMovementScript.StartStunCoroutine();
+
             }
 
         }
-       
-        if(finished == false && collision.collider.gameObject.layer != gameObject.layer && collision.collider.gameObject.layer != playerLayer)
+
+        if (finished == false && collision.collider.gameObject.layer != gameObject.layer && collision.collider.gameObject.layer != playerLayer)
         {
             rb.isKinematic = false;
-            finished = true;
+            HasFinished = true;
             isInAnimation = false;
+          //  hasTriggered = true;
         }
 
     }
@@ -155,8 +169,9 @@ public class Projectile : MonoBehaviour
         if (finished == false && collision.collider.gameObject.layer != gameObject.layer && collision.collider.gameObject.layer != playerLayer)
         {
             rb.isKinematic = false;
-            finished = true;
+            HasFinished = true;
             isInAnimation = false;
+
         }
     }
 }

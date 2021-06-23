@@ -53,7 +53,6 @@ public class EnemyAnimation : MonoBehaviour
         if(previousVelocity != nav.velocity)
         {
             currentSpeed = nav.velocity.magnitude;
-            Debug.Log(currentSpeed);
             ChangeBlendTree();
             previousVelocity = nav.velocity;
         }
