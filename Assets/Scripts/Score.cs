@@ -5,7 +5,9 @@ using TMPro;
 
 public class Score : MonoBehaviour
 {
-    
+    [SerializeField]
+    PlayerState playerState;
+
     [SerializeField]
     int highestScore;
 
@@ -69,7 +71,7 @@ public class Score : MonoBehaviour
         set
         {
             
-            if(value != currentScore)
+            if(value != currentScore && playerState.DeathState == false)
             {
                 //score loss
                 if (currentScore < previousScore)
@@ -84,6 +86,7 @@ public class Score : MonoBehaviour
                     currentScore = Mathf.Clamp(value, previousScore, value);
 
                 }
+               // playerState.PreviousScore = currentScore;
             }
             
            

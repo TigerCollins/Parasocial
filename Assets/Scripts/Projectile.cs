@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
+    public bool hasTriggered = false;
+
     [SerializeField]
     private Score scoreScript;
 
@@ -129,10 +131,14 @@ public class Projectile : MonoBehaviour
     {
         if(collision.gameObject.TryGetComponent(out BasicMovementScript basicMovementScript) && collision.gameObject.layer != enemyLayer && finished != false)
         {
-            finished = true;
-            scoreScript.SubscriberCount += scoreModifier;
-            enemyScript = basicMovementScript;
-            basicMovementScript.StartStunCoroutine();
+            if(!basicMovementScript.isPlayer)
+            {
+                finished = true;
+                scoreScript.SubscriberCount += scoreModifier;
+                enemyScript = basicMovementScript;
+                basicMovementScript.StartStunCoroutine();
+            }
+
         }
        
         if(finished == false && collision.collider.gameObject.layer != gameObject.layer && collision.collider.gameObject.layer != playerLayer)

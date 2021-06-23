@@ -15,6 +15,11 @@ public class BasicMovementScript : MonoBehaviour
     private LayerMask raycastIgnore1;
     [SerializeField]
     private LayerMask raycastIgnore2;
+    [SerializeField]
+    ReticleScript reticleScript;
+
+    [SerializeField]
+    PlayerState playerState;
 
     /// <summary>
     /// Visible to inspector
@@ -53,6 +58,7 @@ public class BasicMovementScript : MonoBehaviour
     public RaycastDetails _raycast;
     [SerializeField]
     private float _pushPower;
+    
 
     [Header("None Player")]
     [SerializeField]
@@ -210,15 +216,18 @@ public class BasicMovementScript : MonoBehaviour
                 _inputAction = tempPlayerInput.actions;
 
             }
-
         }
 
-        //If the Raycast starting point hasn't been assigned...
-        if (_raycast.raycastPoint == null && _raycast.useRaycast)
+        if(playerState != null)
         {
-            Debug.LogWarning("Could not find Raycast Point transform. Raycast may not be in the desired position as a result, add a reference if it is inaccurate");
-            _raycast.raycastPoint = transform;
+            //If the Raycast starting point hasn't been assigned...
+            if (_raycast.raycastPoint == null && _raycast.useRaycast && playerState.DeathState == false)
+            {
+                Debug.LogWarning("Could not find Raycast Point transform. Raycast may not be in the desired position as a result, add a reference if it is inaccurate");
+                _raycast.raycastPoint = transform;
+            }
         }
+       
     }
 
     // Update is called once per frame
@@ -229,12 +238,17 @@ public class BasicMovementScript : MonoBehaviour
         Movement(_movementControl.moveAxis);
         CheckGrounded();
         FOVLerp();
+        ReticleRaycast();
 
-        if (_raycast.useRaycast)
+        if(playerState !=null)
         {
-            Debug.DrawRay(_raycast.raycastPoint.position, _raycast.raycastPoint.forward * _raycast.raycastDistance, _raycast.raycastColour, Time.deltaTime);
-            //Raycast();
+            if (_raycast.useRaycast && playerState.DeathState == false)
+            {
+                Debug.DrawRay(_raycast.raycastPoint.position, _raycast.raycastPoint.forward * _raycast.raycastDistance, _raycast.raycastColour, Time.deltaTime);
+                //Raycast();
+            }
         }
+       
 
         if (distance >= distanceThreshold && !isPlayer && basicAI.useNavMeshOn)
         {
@@ -300,22 +314,26 @@ public class BasicMovementScript : MonoBehaviour
 
     void ApplyGravity()
     {
-        //Reset the MoveVector
-        //  Debug.Log(gameObject.name + ": Character controller is currently " + _characterController.isGrounded);
-        if (_gravitySettings.useCustomGravity )
+        if(isPlayer)
         {
-            _currentMovement = Vector3.zero;
-            velocity += _gravitySettings.customGravityDetails * Time.deltaTime;
-            _currentMovement += _gravitySettings.customGravityDetails;
-        }
+            //Reset the MoveVector
+            //  Debug.Log(gameObject.name + ": Character controller is currently " + _characterController.isGrounded);
+            if (_gravitySettings.useCustomGravity)
+            {
+                _currentMovement = Vector3.zero;
+                velocity += _gravitySettings.customGravityDetails * Time.deltaTime;
+                _currentMovement += _gravitySettings.customGravityDetails;
+            }
 
-        else if (!_gravitySettings.useCustomGravity)
-        {
-            _currentMovement = Vector3.zero;
-            velocity.y += Physics.gravity.y * Time.deltaTime; 
-            _currentMovement += Physics.gravity;
+            else if (!_gravitySettings.useCustomGravity)
+            {
+                _currentMovement = Vector3.zero;
+                velocity.y += Physics.gravity.y * Time.deltaTime;
+                _currentMovement += Physics.gravity;
+            }
+            _characterController.Move(velocity * Time.deltaTime);
         }
-        _characterController.Move(velocity * Time.deltaTime);
+      
 
     }
 
@@ -470,10 +488,36 @@ public class BasicMovementScript : MonoBehaviour
         }
     }
 
+    void ReticleRaycast()
+    {
+        RaycastHit hit;
+        if(playerState != null)
+        {
+            if (_raycast.useRaycast && _controlType == ControlTypeEnum.FirstPerson && playerState.DeathState == false)
+            {
+                Ray ray;
+                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, _raycast.raycastDistance))
+                {
+                    if (hit.collider.gameObject.TryGetComponent(out NavMeshAgent enemy))
+                    {
+                        ReticleState(true);
+                    }
+
+                    else
+                    {
+                        ReticleState(false);
+                    }
+                }
+            }
+        }
+        
+    }
+
     public void Raycast(InputAction.CallbackContext context)
     {
         RaycastHit hit;
-        if (_raycast.useRaycast)
+        if (_raycast.useRaycast && playerState.DeathState == false)
         {
             if(_controlType == ControlTypeEnum.FirstPerson)
             {
@@ -633,18 +677,35 @@ public class BasicMovementScript : MonoBehaviour
 
     public void StartStunCoroutine()
     {
-        if(stunCoroutine != null)
+        if(!isPlayer)
         {
-            StopCoroutine(stunCoroutine);
+            if (stunCoroutine != null)
+            {
+                StopCoroutine(stunCoroutine);
+            }
+            stunCoroutine = StartCoroutine(Stun());
         }
-        stunCoroutine = StartCoroutine(Stun());
+            
+     
     }
 
     IEnumerator Stun()
     {
-        basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 8;
+
+            basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 8;
+
+     
         yield return new WaitForSeconds(stunTime);
-        basicAI.navMeshAgent.speed = originalSpeed;
+
+            basicAI.navMeshAgent.speed = originalSpeed;
+    }
+
+    void ReticleState(bool hitState)
+    {
+        if(isPlayer)
+        {
+            reticleScript.canHitEnemy = hitState;
+        }
     }
 }
 
