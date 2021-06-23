@@ -20,6 +20,8 @@ public class BasicMovementScript : MonoBehaviour
 
     [SerializeField]
     PlayerState playerState;
+    [SerializeField]
+    EnemyAnimation enemyAnimationScript;
 
     /// <summary>
     /// Visible to inspector
@@ -693,11 +695,12 @@ public class BasicMovementScript : MonoBehaviour
     {
 
             basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 8;
-
+        enemyAnimationScript.Stun = true;
      
         yield return new WaitForSeconds(stunTime);
 
-            basicAI.navMeshAgent.speed = originalSpeed;
+        enemyAnimationScript.Stun = false;
+        basicAI.navMeshAgent.speed = originalSpeed;
     }
 
     void ReticleState(bool hitState)

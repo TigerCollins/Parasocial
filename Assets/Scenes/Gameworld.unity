@@ -2194,6 +2194,7 @@ MonoBehaviour:
     m_Bits: 2048
   reticleScript: {fileID: 1469205648}
   playerState: {fileID: 1382420843882025305}
+  enemyAnimationScript: {fileID: 0}
   _characterController: {fileID: 1382420843882025301}
   _playerAvatarObject: {fileID: 1382420842929017007}
   _controlType: 2
@@ -2566,6 +2567,7 @@ MonoBehaviour:
     m_Bits: 2048
   reticleScript: {fileID: 0}
   playerState: {fileID: 0}
+  enemyAnimationScript: {fileID: 6305534750708063943}
   _characterController: {fileID: 6305534750708063937}
   _playerAvatarObject: {fileID: 6305534751928983355}
   _controlType: 2
@@ -2739,7 +2741,7 @@ MonoBehaviour:
   nav: {fileID: 6305534750708063940}
   previousVelocity: {x: 0, y: 0, z: 0}
   currentSpeed: 0
-  maxSpeed: 0
+  isStunned: 0
 --- !u!4 &6305534750708063948
 Transform:
   m_ObjectHideFlags: 0

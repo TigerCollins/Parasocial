@@ -22,6 +22,8 @@ public class EnemyAnimation : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     float currentSpeed;
+    [SerializeField]
+    bool isStunned;
 
 
     public void Awake()
@@ -29,6 +31,20 @@ public class EnemyAnimation : MonoBehaviour
         if(enemySprites.Count > 0)
         {
             skinnedMesh.mainTexture = enemySprites[Random.Range(0, enemySprites.Count)];
+        }
+    }
+
+    public bool Stun
+    {
+        get
+        {
+            return isStunned;
+        }
+
+        set
+        {
+            isStunned = value;
+            enemyAnimator.SetBool("isStunned", value);
         }
     }
 
