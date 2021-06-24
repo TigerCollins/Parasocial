@@ -122,14 +122,18 @@ public class BasicMovementScript : MonoBehaviour
         }
     }
 
-  
-
-    void OnControllerColliderHit(ControllerColliderHit hit)
+    private void OnCollisionEnter(Collision hit)
+        
     {
         if (!isPlayer && hit.collider.TryGetComponent(out PlayerState playerState))
         {
             StartCoroutine(playerState.GameOverScreen());
         }
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+       
 
         if (hit.collider.TryGetComponent(out Projectile projectile))
         {
