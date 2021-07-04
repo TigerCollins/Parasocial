@@ -81,6 +81,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -291,6 +292,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -299,7 +301,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1d3ab471cba05c14495927ae56fb84b9, type: 2}
+  - {fileID: 2100000, guid: d2cb0617010817c4ea71e6b42831b102, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -490,6 +492,9 @@ MonoBehaviour:
   raycastIgnore2:
     serializedVersion: 2
     m_Bits: 2048
+  reticleScript: {fileID: 0}
+  playerState: {fileID: 0}
+  enemyAnimationScript: {fileID: 0}
   _characterController: {fileID: 1382420843928379806}
   _playerAvatarObject: {fileID: 1382420843002077284}
   _controlType: 2
@@ -539,6 +544,14 @@ MonoBehaviour:
     raycastDistance: 100
     raycastColour: {r: 0.8018868, g: 0.12482201, b: 0.12482201, a: 1}
   _pushPower: 12.96
+  basicAI:
+    useNavMeshOn: 0
+    moveToTarget: {fileID: 0}
+    navMeshAgent: {fileID: 0}
+  stunTime: 0
+  distance: 0
+  distanceThreshold: 0
+  isVisible: 0
 --- !u!114 &3945612265140929669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -742,6 +755,8 @@ MonoBehaviour:
   thrownObjectHolder: {fileID: 0}
   throwPoint: {fileID: 864307920727352735}
   targetTransform: {fileID: 0}
+  throwHeight: 0
+  throwTime: 0
 --- !u!1 &1382420844116681212
 GameObject:
   m_ObjectHideFlags: 0

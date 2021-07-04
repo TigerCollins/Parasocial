@@ -5,6 +5,7 @@ using TMPro;
 
 public class Score : MonoBehaviour
 {
+    internal GameManager game;
     [SerializeField]
     PlayerState playerState;
 
@@ -24,6 +25,7 @@ public class Score : MonoBehaviour
    
     int previousScore;
     float scoreLerpTime = 0;
+
 
     /*  [Header("Animation")]
       [SerializeField]
@@ -92,5 +94,7 @@ public class Score : MonoBehaviour
            
         }
     }
+
+
 }
 
