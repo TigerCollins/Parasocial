@@ -696,6 +696,7 @@ public class BasicMovementScript : MonoBehaviour
             {
                 StopCoroutine(stunCoroutine);
             }
+            originalSpeed = basicAI.navMeshAgent.speed;
             stunCoroutine = StartCoroutine(Stun());
         }
             
@@ -705,7 +706,7 @@ public class BasicMovementScript : MonoBehaviour
     IEnumerator Stun()
     {
 
-            basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 8;
+            basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 10;
         enemyAnimationScript.Stun = true;
      
         yield return new WaitForSeconds(stunTime);

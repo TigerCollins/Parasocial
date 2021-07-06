@@ -6,6 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
+    [SerializeField]
+    float easeOutTime = .5f;
+    [SerializeField]
+    float timeDelay = .5f;
+    [SerializeField]
+    MeshCollider newCollider;
     public bool hasTriggered = false;
 
     [SerializeField]
@@ -44,6 +50,7 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private Rigidbody rb;
     Vector3 startingPos;
+    Coroutine endCoroutine;
     // Start is called before the first frame update
     void Awake()
     {
@@ -58,6 +65,11 @@ public class Projectile : MonoBehaviour
         startingPos = transform.position;
         Animation = 0;
         StartCoroutine(NewAnimation());
+    }
+
+    public void Start()
+    {
+
     }
 
     public float EffectiveHeight
@@ -135,7 +147,7 @@ public class Projectile : MonoBehaviour
 
         //Animation = Animation % animationTime;
 
-        
+       
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -149,7 +161,12 @@ public class Projectile : MonoBehaviour
                 scoreScript.SubscriberCount += scoreModifier;
                 enemyScript = basicMovementScript;
                 basicMovementScript.StartStunCoroutine();
+                if(endCoroutine == null)
+                {
+                    endCoroutine = StartCoroutine(LeanTweenCoroutine(easeOutTime));
+                }
 
+           //     leanTween.scale(gameObject, new Vector3(0, 0, 0), 1).setDestroyOnComplete(true).setEaseInOutBounce();
             }
 
         }
@@ -159,7 +176,11 @@ public class Projectile : MonoBehaviour
             rb.isKinematic = false;
             HasFinished = true;
             isInAnimation = false;
-          //  hasTriggered = true;
+            if (endCoroutine == null)
+            {
+                endCoroutine = StartCoroutine(LeanTweenCoroutine(easeOutTime));
+            }
+            //  hasTriggered = true;
         }
 
     }
@@ -171,7 +192,43 @@ public class Projectile : MonoBehaviour
             rb.isKinematic = false;
             HasFinished = true;
             isInAnimation = false;
-
+            if (endCoroutine == null)
+            {
+                endCoroutine = StartCoroutine(LeanTweenCoroutine(easeOutTime));
+            }
         }
+    }
+
+    public IEnumerator LeanTweenCoroutine(float time)
+    {
+        float countdownTime = time + timeDelay;
+        bool hasStarted = false;
+        Destroy(gameObject,countdownTime + 3f);
+        while (countdownTime > 0)
+        {
+            countdownTime -= Time.deltaTime;
+            if(gameObject.transform.localScale == Vector3.zero)
+            {
+                newCollider.enabled = false;
+                rb.isKinematic = true;
+                Destroy(gameObject);
+            }
+
+            if (!hasStarted)
+            {
+                LeanTween.scale(gameObject, Vector3.zero, .4f).setDelay(timeDelay).setEaseInBack().setOvershoot(1.5f);
+                hasStarted = true;
+            }
+         
+             if(countdownTime <= .2f)
+             {
+                 newCollider.enabled = false;
+                rb.isKinematic = true;
+             }
+            
+            yield return null;
+        }
+        Destroy(gameObject);
+       
     }
 }

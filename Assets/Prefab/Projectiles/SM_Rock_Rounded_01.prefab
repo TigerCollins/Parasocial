@@ -111,7 +111,7 @@ Rigidbody:
   m_AngularDrag: 0.31
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!114 &5032446868485925045
@@ -126,6 +126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3909e94b9fa1143b1cff8b682e9f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  easeOutTime: 0.75
+  timeDelay: 6
+  newCollider: {fileID: 4986468474829967781}
   hasTriggered: 0
   scoreScript: {fileID: 0}
   throwObjectScript: {fileID: 0}

@@ -5,6 +5,14 @@ using UnityEngine.AI;
 
 public class EnemyAnimation : MonoBehaviour
 {
+
+    [SerializeField]
+    AnimationCurve speedCurve;
+    [SerializeField]
+    float maxSpeed = 7;
+    [SerializeField]
+    float timeToMaxSpeed;
+    float elapsedTime;
     [Header("Skin")]
     [SerializeField]
     List<Texture> enemySprites = new List<Texture>();
@@ -48,8 +56,15 @@ public class EnemyAnimation : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        elapsedTime += Time.deltaTime;
+        nav.speed = speedCurve.Evaluate(elapsedTime / timeToMaxSpeed) * maxSpeed;
+    }
+
     public void FixedUpdate()
     {
+      
         if(previousVelocity != nav.velocity)
         {
             currentSpeed = nav.velocity.magnitude;
