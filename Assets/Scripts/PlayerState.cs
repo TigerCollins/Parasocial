@@ -98,7 +98,7 @@ public class PlayerState : MonoBehaviour
     {
         gameOverCanvasGroup.alpha = 0;
         newScoreText.text = "Well, at least you gained <color=red>" + newScore + "</color> new followers on this stream. Last Stream you gained <color=red>0</color> new followers...";
-        Cursor.visible = false;
+       // Cursor.visible = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -124,9 +124,8 @@ public class PlayerState : MonoBehaviour
     public IEnumerator GameOverScreen()
     {
         isDead = true;
-        Time.timeScale = 0;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+
+      
         Debug.Log("Time has paused for gameover sequence");
         while (gameOverCanvasGroup.alpha < 1)
         {

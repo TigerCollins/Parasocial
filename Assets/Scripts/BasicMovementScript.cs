@@ -43,8 +43,7 @@ public class BasicMovementScript : MonoBehaviour
     public bool isPlayer = true;
     [SerializeField]
     private MovementDetails _movementControl;
-    [SerializeField]
-    private FirstPersonDetails _firstPersonControl;
+    public FirstPersonDetails _firstPersonControl;
     [SerializeField]
     private JumpDetails jumpDetails;
         [SerializeField]
@@ -112,7 +111,7 @@ public class BasicMovementScript : MonoBehaviour
     {
         CheckForNullReference();
         AwakeGravity();
-        Cursor.lockState = CursorLockMode.Locked;
+      ///  Cursor.lockState = CursorLockMode.Locked;
         SprintSetup();
         if(!isPlayer && basicAI.useNavMeshOn)
         {
@@ -380,7 +379,7 @@ public class BasicMovementScript : MonoBehaviour
 
     public void AdjustLookVector(InputAction.CallbackContext context)
     {
-        if (_controlType == ControlTypeEnum.FirstPerson)
+        if (_controlType == ControlTypeEnum.FirstPerson && Time.timeScale != 0)
         {
             _firstPersonControl.lookAxis = context.ReadValue<Vector2>();  //Mainly for debugging. You can place Context.ReadValue directly into the Movement argument if desired.
             _horizontalLookAxis += (_firstPersonControl.xSensitivity / 10) * _firstPersonControl.lookAxis.x;
@@ -410,7 +409,7 @@ public class BasicMovementScript : MonoBehaviour
 
     public void JumpFunction(InputAction.CallbackContext callbackContext)
     {
-        if(jumpDetails.canJump && callbackContext.performed && jumpDetails.isGrounded && !hasJumped)
+        if(jumpDetails.canJump && callbackContext.performed && jumpDetails.isGrounded && !hasJumped && Time.timeScale != 0)
         {
             hasJumped = true;
             if(_gravitySettings.useCustomGravity)
@@ -530,43 +529,47 @@ public class BasicMovementScript : MonoBehaviour
     public void Raycast(InputAction.CallbackContext context)
     {
         RaycastHit hit;
-        if (_raycast.useRaycast && playerState.DeathState == false)
+        if(Time.timeScale != 0)
         {
-            if(_controlType == ControlTypeEnum.FirstPerson)
+            if (_raycast.useRaycast && playerState.DeathState == false)
             {
-                Ray ray;
-                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, _raycast.raycastDistance) && context.performed)
+                if (_controlType == ControlTypeEnum.FirstPerson)
                 {
-                   if (hit.collider && hit.collider.gameObject.layer != raycastIgnore1 && hit.collider.gameObject.layer != raycastIgnore2)
+                    Ray ray;
+                    ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out hit, _raycast.raycastDistance) && context.performed)
                     {
-                        GameObject newPoint = Instantiate(targetPrefab, hit.point, Quaternion.identity);
+                        if (hit.collider && hit.collider.gameObject.layer != raycastIgnore1 && hit.collider.gameObject.layer != raycastIgnore2)
+                        {
+                            GameObject newPoint = Instantiate(targetPrefab, hit.point, Quaternion.identity);
+                            throwObject.targetTransform = newPoint;
+                        }
+                    }
+
+                    //If nothing hit
+                    else if (context.performed)
+                    {
+                        GameObject newPoint = Instantiate(targetPrefab, ray.GetPoint(_raycast.raycastDistance), Quaternion.identity);
                         throwObject.targetTransform = newPoint;
-                    }                       
+
+                    }
                 }
 
-                //If nothing hit
-                else if(context.performed)
+                else
                 {
-                    GameObject newPoint = Instantiate(targetPrefab, ray.GetPoint(_raycast.raycastDistance), Quaternion.identity);
-                    throwObject.targetTransform = newPoint;
-                    
+                    if (Physics.Raycast(_raycast.raycastPoint.position, _raycast.raycastPoint.forward, out hit, _raycast.raycastDistance) && context.performed)
+                    {
+                        //Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
+                        /*
+                         if (hit.collider.TryGetComponent(out QuipScript newQuipScript))
+                         {
+                             newQuipScript.UpdateText();
+                         }
+                         */
+                    }
                 }
             }
-
-            else
-            {
-                if (Physics.Raycast(_raycast.raycastPoint.position, _raycast.raycastPoint.forward, out hit, _raycast.raycastDistance) && context.performed)
-                {
-                    //Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
-                    /*
-                     if (hit.collider.TryGetComponent(out QuipScript newQuipScript))
-                     {
-                         newQuipScript.UpdateText();
-                     }
-                     */
-                }
-            }
+        
         }
         
        
@@ -636,28 +639,31 @@ public class BasicMovementScript : MonoBehaviour
 
     public void SprintMovement(InputAction.CallbackContext callbackContext)
     {
-        if(callbackContext.performed || callbackContext.started )
+        if (Time.timeScale != 0)
         {
-            if(_controlType == ControlTypeEnum.FirstPerson && sprintDetails.canSprint)
+            if (callbackContext.performed || callbackContext.started)
             {
-                if (_movementControl.moveAxis.y > 0)
+                if (_controlType == ControlTypeEnum.FirstPerson && sprintDetails.canSprint)
                 {
-                    isSprinting = true;
+                    if (_movementControl.moveAxis.y > 0)
+                    {
+                        isSprinting = true;
 
-                    newFOV = baseFOV * sprintDetails.fovMultiplier;
-                    actualSprintMultipler = sprintDetails.sprintMultiplier;
+                        newFOV = baseFOV * sprintDetails.fovMultiplier;
+                        actualSprintMultipler = sprintDetails.sprintMultiplier;
+                    }
                 }
+
             }
 
-        }
-
-        else if(callbackContext.canceled && sprintDetails.canSprint)
-        {
-            if (_controlType == ControlTypeEnum.FirstPerson)
+            else if (callbackContext.canceled && sprintDetails.canSprint)
             {
-                isSprinting = false;
-                newFOV = baseFOV;
-                actualSprintMultipler = baseSprintMultipler;
+                if (_controlType == ControlTypeEnum.FirstPerson)
+                {
+                    isSprinting = false;
+                    newFOV = baseFOV;
+                    actualSprintMultipler = baseSprintMultipler;
+                }
             }
         }
     }

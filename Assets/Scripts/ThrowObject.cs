@@ -24,7 +24,7 @@ public class ThrowObject : MonoBehaviour
 
     public void ThrowRandomObject(InputAction.CallbackContext callbackContext)
     {
-        if(callbackContext.performed && possibleObjects != null)
+        if(callbackContext.performed && possibleObjects != null && Time.timeScale != 0)
         {
             int selectedID = Random.Range(0, possibleObjects.Length);
              GameObject instantiatedObject = Instantiate( possibleObjects[selectedID],throwPoint.position, Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)), thrownObjectHolder);
