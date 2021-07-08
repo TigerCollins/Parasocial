@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class MenuManager : MonoBehaviour
@@ -16,6 +17,8 @@ public class MenuManager : MonoBehaviour
     MenuState previousMenu;
     [SerializeField]
     EventSystem eventSystem;
+    [SerializeField]
+    bool hasBeenPaused;
 
     [Header("In-Game")]
     [SerializeField] CanvasGroup gameCanvasGroup;
@@ -30,15 +33,24 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI startGameText;
     [SerializeField]
+    TextMeshProUGUI exitGameText;
+    [SerializeField]
     internal Slider[] sfxSlider;
 
     [Header("Canvas Groups")]
+    [SerializeField]
+    CanvasGroup loadingGroup;
     [SerializeField]
     CanvasGroup audioGroup;
     [SerializeField]
     CanvasGroup settingsGroup;
     [SerializeField]
     CanvasGroup menuGroup;
+    [SerializeField]
+    CanvasGroup tutorialGroup;
+
+    [SerializeField]
+    CanvasGroup controlsGroup;
 
 
 
@@ -77,6 +89,19 @@ public class MenuManager : MonoBehaviour
 
     }
 
+    public void SetPreviousMenuType()
+    {
+        if (hasBeenPaused)
+        {
+            previousMenu = MenuState.PauseMenu;
+        }
+
+        else
+        {
+            previousMenu = MenuState.MainMenu;
+        }
+    }
+
     public void ChangeMenuCanvas(MenuState wantedGameState)
     {
         switch (wantedGameState)
@@ -89,8 +114,17 @@ public class MenuManager : MonoBehaviour
                 gameCanvasGroup.interactable = false;
                 gameCanvasGroup.blocksRaycasts = false;
                 settingsGroup.interactable = false;
-                settingsGroup.alpha = 0;
+                settingsGroup.alpha = 0;               
                 settingsGroup.blocksRaycasts = false;
+                audioGroup.alpha = 0;
+                audioGroup.interactable = false;
+                audioGroup.blocksRaycasts = false;
+                tutorialGroup.alpha = 0;
+                tutorialGroup.interactable = false;
+                tutorialGroup.blocksRaycasts = false;
+                controlsGroup.alpha = 0;
+                controlsGroup.interactable = false;
+                controlsGroup.blocksRaycasts = false;
                 break;
             case MenuState.PauseMenu:
                 menuGroup.alpha = 1;
@@ -103,6 +137,16 @@ public class MenuManager : MonoBehaviour
                 settingsGroup.alpha = 1;
                 settingsGroup.blocksRaycasts = false;
                 startGameText.text = "Resume Stream";
+                audioGroup.alpha = 1;
+                audioGroup.interactable = false;
+                audioGroup.blocksRaycasts = false;
+                tutorialGroup.alpha = 0;
+                tutorialGroup.interactable = false;
+                tutorialGroup.blocksRaycasts = false;
+                controlsGroup.alpha = 0;
+                controlsGroup.interactable = false;
+                controlsGroup.blocksRaycasts = false;
+                exitGameText.text = "Reset Stream";
                 break;
             case MenuState.MainMenu:
                 menuGroup.alpha = 1;
@@ -115,6 +159,16 @@ public class MenuManager : MonoBehaviour
                 settingsGroup.alpha = 1;
                 settingsGroup.blocksRaycasts = false;
                 startGameText.text = "Start Stream";
+                audioGroup.alpha = 1;
+                audioGroup.interactable = false;
+                audioGroup.blocksRaycasts = false;
+                tutorialGroup.alpha = 0;
+                tutorialGroup.interactable = false;
+                tutorialGroup.blocksRaycasts = false;
+                controlsGroup.alpha = 0;
+                controlsGroup.interactable = false;
+                controlsGroup.blocksRaycasts = false;
+                exitGameText.text = "Exit";
                 break;
             case MenuState.GraphicsSettings:
                 menuGroup.alpha = 1;
@@ -126,6 +180,15 @@ public class MenuManager : MonoBehaviour
                 settingsGroup.interactable = true;
                 settingsGroup.alpha = 1;
                 settingsGroup.blocksRaycasts = true;
+                audioGroup.alpha = 1;
+                audioGroup.interactable = false;
+                audioGroup.blocksRaycasts = false;
+                tutorialGroup.alpha = 0;
+                tutorialGroup.interactable = false;
+                tutorialGroup.blocksRaycasts = false;
+                controlsGroup.alpha = 0;
+                controlsGroup.interactable = false;
+                controlsGroup.blocksRaycasts = false;
                 break;
             case MenuState.AudioSettings:
                 menuGroup.alpha = 1;
@@ -137,6 +200,15 @@ public class MenuManager : MonoBehaviour
                 settingsGroup.interactable = false;
                 settingsGroup.alpha = 1;
                 settingsGroup.blocksRaycasts = false;
+                audioGroup.alpha = 1;
+                audioGroup.interactable = true;
+                audioGroup.blocksRaycasts = true;
+                tutorialGroup.alpha = 0;
+                tutorialGroup.interactable = false;
+                tutorialGroup.blocksRaycasts = false;
+                controlsGroup.alpha = 0;
+                controlsGroup.interactable = false;
+                controlsGroup.blocksRaycasts = false;
                 break;
             case MenuState.Tutorial:
                 menuGroup.alpha = 0;
@@ -148,6 +220,15 @@ public class MenuManager : MonoBehaviour
                 settingsGroup.interactable = false;
                 settingsGroup.alpha = 0;
                 settingsGroup.blocksRaycasts = false;
+                audioGroup.alpha = 0;
+                audioGroup.interactable = false;
+                audioGroup.blocksRaycasts = false;
+                tutorialGroup.alpha = 1;
+                tutorialGroup.interactable = true;
+                tutorialGroup.blocksRaycasts = true;
+                controlsGroup.alpha = 0;
+                controlsGroup.interactable = false;
+                controlsGroup.blocksRaycasts = false;
                 break;
             case MenuState.Controls:
                 menuGroup.alpha = 0;
@@ -159,6 +240,15 @@ public class MenuManager : MonoBehaviour
                 settingsGroup.interactable = false;
                 settingsGroup.alpha = 0;
                 settingsGroup.blocksRaycasts = false;
+                audioGroup.alpha = 0;
+                audioGroup.interactable = false;
+                audioGroup.blocksRaycasts = false;
+                tutorialGroup.alpha = 0;
+                tutorialGroup.interactable = false;
+                tutorialGroup.blocksRaycasts = false;
+                controlsGroup.alpha = 1;
+                controlsGroup.interactable = true;
+                controlsGroup.blocksRaycasts = true;
                 break;
             case MenuState.GameOver:
                 menuGroup.alpha = 0;
@@ -170,6 +260,15 @@ public class MenuManager : MonoBehaviour
                 settingsGroup.interactable = false;
                 settingsGroup.alpha = 0;
                 settingsGroup.blocksRaycasts = false;
+                audioGroup.alpha = 0;
+                audioGroup.interactable = false;
+                audioGroup.blocksRaycasts = false;
+                tutorialGroup.alpha = 0;
+                tutorialGroup.interactable = false;
+                tutorialGroup.blocksRaycasts = false;
+                controlsGroup.alpha = 0;
+                controlsGroup.interactable = false;
+                controlsGroup.blocksRaycasts = false;
                 break;
             default:
                 break;
@@ -189,6 +288,7 @@ public class MenuManager : MonoBehaviour
                 Time.timeScale = 0;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                hasBeenPaused = true;
                 break;
             case MenuState.MainMenu:
                 Time.timeScale = 0;
@@ -199,11 +299,13 @@ public class MenuManager : MonoBehaviour
                 Time.timeScale = 0;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+
                 break;
             case MenuState.AudioSettings:
                 Time.timeScale = 0;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+
                 break;
             case MenuState.Tutorial:
                 Time.timeScale = 0;
@@ -219,6 +321,7 @@ public class MenuManager : MonoBehaviour
                 Time.timeScale = 0;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                hasBeenPaused = true;
                 break;
             default:
                 break;
@@ -320,13 +423,21 @@ public class MenuManager : MonoBehaviour
 
     public void QuitGame()
     {
-        if (menuState == MenuState.MainMenu || menuState == MenuState.PauseMenu)
+        if (menuState == MenuState.MainMenu)
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
          Application.Quit();
 #endif
+        }
+
+        else if(menuState == MenuState.PauseMenu)
+        {
+            loadingGroup.alpha = 1;
+            loadingGroup.blocksRaycasts = true;
+            loadingGroup.interactable = true;
+            SceneManager.LoadScene(0);
         }
 
 
