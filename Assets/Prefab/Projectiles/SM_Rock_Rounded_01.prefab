@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5031402333450762001}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 51.85094, y: 4.35, z: 45.89688}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -54,6 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -139,9 +140,11 @@ MonoBehaviour:
     m_Bits: 1024
   isInAnimation: 1
   animationTime: 13.36
+  remainingCountdownTime: 30
   enemyLayer:
     serializedVersion: 2
     m_Bits: 4096
   scoreModifier: 30
+  viewerModifier: 45
   enemyScript: {fileID: 0}
   rb: {fileID: 0}

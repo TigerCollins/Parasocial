@@ -8,6 +8,10 @@ using UnityEngine.InputSystem; //Relates to the new input system and not the def
 [RequireComponent(typeof(CharacterController))]
 public class BasicMovementScript : MonoBehaviour
 {
+    [SerializeField]
+    Score score;
+    [SerializeField]
+    Transform enemyPos;
     public GameObject targetPrefab;
     [SerializeField]
     private ThrowObject throwObject;
@@ -22,6 +26,8 @@ public class BasicMovementScript : MonoBehaviour
     PlayerState playerState;
     [SerializeField]
     EnemyAnimation enemyAnimationScript;
+    [SerializeField]
+    float distanceScoreThreshold;
 
     /// <summary>
     /// Visible to inspector
@@ -68,8 +74,9 @@ public class BasicMovementScript : MonoBehaviour
     float stunTime;
     float originalSpeed;
     Coroutine stunCoroutine;
-    
 
+    // Don't set this too high, or NavMesh.SamplePosition() may slow down
+    float onMeshThreshold = 8;
 
     /// <summary>
     /// Invisble to Inspector
@@ -126,6 +133,7 @@ public class BasicMovementScript : MonoBehaviour
     {
         if (!isPlayer && hit.collider.TryGetComponent(out PlayerState playerState))
         {
+            playerState.triggeredByCollision = true;
             StartCoroutine(playerState.GameOverScreen());
         }
     }
@@ -150,6 +158,26 @@ public class BasicMovementScript : MonoBehaviour
       
 
         
+    }
+
+    public bool IsAgentOnNavMesh(GameObject agentObject)
+    {
+        Vector3 agentPosition = agentObject.transform.position;
+        NavMeshHit hit;
+
+        // Check for nearest point on navmesh to agent, within onMeshThreshold
+        if (NavMesh.SamplePosition(agentPosition, out hit, onMeshThreshold, NavMesh.AllAreas))
+        {
+            // Check if the positions are vertically aligned
+            if (Mathf.Approximately(agentPosition.x, hit.position.x)
+                && Mathf.Approximately(agentPosition.z, hit.position.z))
+            {
+                // Lastly, check if object is below navmesh
+                return agentPosition.y >= hit.position.y;
+            }
+        }
+
+        return false;
     }
 
     public void RigidBodyPhysics(ControllerColliderHit hit)
@@ -252,7 +280,29 @@ public class BasicMovementScript : MonoBehaviour
         FOVLerp();
         ReticleRaycast();
 
-        if(playerState !=null)
+        if(isPlayer && Vector3.Distance(enemyPos.position, gameObject.transform.position) > distanceScoreThreshold)
+        {
+            score.HowFar = true;
+        }
+
+        else if(isPlayer && Vector3.Distance(enemyPos.position, gameObject.transform.position) < distanceScoreThreshold)
+        {
+            score.HowFar = false;
+        }
+
+
+        if (IsAgentOnNavMesh(gameObject) && isPlayer)
+        {
+            score.IsOnMesh = false;
+        }
+
+        else if(!IsAgentOnNavMesh(gameObject) && isPlayer)
+        {
+            score.IsOnMesh = true;
+        }
+
+
+        if (playerState !=null)
         {
             if (_raycast.useRaycast && playerState.DeathState == false)
             {
@@ -712,7 +762,7 @@ public class BasicMovementScript : MonoBehaviour
     IEnumerator Stun()
     {
 
-            basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 10;
+            basicAI.navMeshAgent.speed = basicAI.navMeshAgent.speed / 50;
         enemyAnimationScript.Stun = true;
      
         yield return new WaitForSeconds(stunTime);

@@ -17,6 +17,7 @@ public class MenuManager : MonoBehaviour
     MenuState previousMenu;
     [SerializeField]
     EventSystem eventSystem;
+
     [SerializeField]
     bool hasBeenPaused;
 
@@ -51,6 +52,13 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField]
     CanvasGroup controlsGroup;
+
+    [Space(5)]
+
+    [SerializeField]
+    CanvasGroup audioMixerDarkGroup;
+     [SerializeField]
+    CanvasGroup settingsDarkGroup;
 
 
 
@@ -125,6 +133,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.alpha = 0;
                 controlsGroup.interactable = false;
                 controlsGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.alpha = 0;
+                audioMixerDarkGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.interactable = false;
+                settingsDarkGroup.alpha = 0;
+                settingsDarkGroup.blocksRaycasts = false;
+                settingsDarkGroup.interactable = false;
                 break;
             case MenuState.PauseMenu:
                 menuGroup.alpha = 1;
@@ -147,6 +161,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.interactable = false;
                 controlsGroup.blocksRaycasts = false;
                 exitGameText.text = "Reset Stream";
+                audioMixerDarkGroup.alpha = 0;
+                audioMixerDarkGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.interactable = false;
+                settingsDarkGroup.alpha = 0;
+                settingsDarkGroup.blocksRaycasts = false;
+                settingsDarkGroup.interactable = false;
                 break;
             case MenuState.MainMenu:
                 menuGroup.alpha = 1;
@@ -169,6 +189,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.interactable = false;
                 controlsGroup.blocksRaycasts = false;
                 exitGameText.text = "Exit";
+                audioMixerDarkGroup.alpha = 0;
+                audioMixerDarkGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.interactable = false;
+                settingsDarkGroup.alpha = 0;
+                settingsDarkGroup.blocksRaycasts = false;
+                settingsDarkGroup.interactable = false;
                 break;
             case MenuState.GraphicsSettings:
                 menuGroup.alpha = 1;
@@ -189,6 +215,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.alpha = 0;
                 controlsGroup.interactable = false;
                 controlsGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.alpha = 0;
+                audioMixerDarkGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.interactable = false;
+                settingsDarkGroup.alpha = 1;
+                settingsDarkGroup.blocksRaycasts = true;
+                settingsDarkGroup.interactable = true;
                 break;
             case MenuState.AudioSettings:
                 menuGroup.alpha = 1;
@@ -209,6 +241,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.alpha = 0;
                 controlsGroup.interactable = false;
                 controlsGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.alpha = 1;
+                audioMixerDarkGroup.blocksRaycasts = true;
+                audioMixerDarkGroup.interactable = true;
+                settingsDarkGroup.alpha = 0;
+                settingsDarkGroup.blocksRaycasts = false;
+                settingsDarkGroup.interactable = false;
                 break;
             case MenuState.Tutorial:
                 menuGroup.alpha = 0;
@@ -229,6 +267,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.alpha = 0;
                 controlsGroup.interactable = false;
                 controlsGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.alpha = 0;
+                audioMixerDarkGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.interactable = false;
+                settingsDarkGroup.alpha = 0;
+                settingsDarkGroup.blocksRaycasts = false;
+                settingsDarkGroup.interactable = false;
                 break;
             case MenuState.Controls:
                 menuGroup.alpha = 0;
@@ -249,6 +293,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.alpha = 1;
                 controlsGroup.interactable = true;
                 controlsGroup.blocksRaycasts = true;
+                audioMixerDarkGroup.alpha = 0;
+                audioMixerDarkGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.interactable = false;
+                settingsDarkGroup.alpha = 0;
+                settingsDarkGroup.blocksRaycasts = false;
+                settingsDarkGroup.interactable = false;
                 break;
             case MenuState.GameOver:
                 menuGroup.alpha = 0;
@@ -269,6 +319,12 @@ public class MenuManager : MonoBehaviour
                 controlsGroup.alpha = 0;
                 controlsGroup.interactable = false;
                 controlsGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.alpha = 0;
+                audioMixerDarkGroup.blocksRaycasts = false;
+                audioMixerDarkGroup.interactable = false;
+                settingsDarkGroup.alpha = 0;
+                settingsDarkGroup.blocksRaycasts = false;
+                settingsDarkGroup.interactable = false;
                 break;
             default:
                 break;

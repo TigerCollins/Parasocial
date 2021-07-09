@@ -9,7 +9,11 @@ public class PlayerState : MonoBehaviour
     [SerializeField]
     GameOverScript gameOverScript;
     [SerializeField]
+    MenuManager menuManager;
+    [SerializeField]
     Score scoreScript;
+    [SerializeField]
+    TextMeshProUGUI firstTextGroup;
 
     [Space(10)]
 
@@ -48,6 +52,7 @@ public class PlayerState : MonoBehaviour
     Coroutine fadeInCoroutine;
     [SerializeField]
     float timeBetweenGameOver = .75f;
+    public bool triggeredByCollision;
 
     public bool DeathState
     {
@@ -105,7 +110,9 @@ public class PlayerState : MonoBehaviour
     {
         if (collision.collider.gameObject.TryGetComponent(out PlayerState playerState))
         {
+            triggeredByCollision = true;
             fadeInCoroutine = StartCoroutine(playerState.GameOverScreen());
+ 
         }
 
     }
@@ -115,16 +122,24 @@ public class PlayerState : MonoBehaviour
 
         if (hit.collider.gameObject.layer == 12 && fadeInCoroutine == null)
         {
+            triggeredByCollision = true;
+            fadeInCoroutine = StartCoroutine(GameOverScreen());
           
-                fadeInCoroutine = StartCoroutine(GameOverScreen());
-            
         }
     }
 
     public IEnumerator GameOverScreen()
     {
         isDead = true;
+        if(triggeredByCollision)
+        {
+           firstTextGroup.text =  "You've been captured by a <color=red>Parasocial</color> andy...";
+        }
 
+        else
+        {
+            firstTextGroup.text = "...All your <color=red>viewers</color> left... ";
+        }
       
         Debug.Log("Time has paused for gameover sequence");
         while (gameOverCanvasGroup.alpha < 1)
@@ -132,6 +147,7 @@ public class PlayerState : MonoBehaviour
             gameOverCanvasGroup.alpha += Time.unscaledDeltaTime;
             yield return null;
         }
+        menuManager.SetGamestateEnum("GameOver");
         currentScore = scoreScript.SubscriberCount ;
 
         yield return new WaitForSecondsRealtime(timeBetweenGameOver);

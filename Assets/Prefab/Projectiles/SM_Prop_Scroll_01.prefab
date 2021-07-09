@@ -154,9 +154,11 @@ MonoBehaviour:
     m_Bits: 1024
   isInAnimation: 1
   animationTime: 13.36
+  remainingCountdownTime: 30
   enemyLayer:
     serializedVersion: 2
     m_Bits: 4096
   scoreModifier: 30
+  viewerModifier: 45
   enemyScript: {fileID: 0}
   rb: {fileID: 1426845655247053418}

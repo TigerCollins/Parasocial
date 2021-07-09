@@ -35,6 +35,9 @@ public class Projectile : MonoBehaviour
 
     [SerializeField]
     float animationTime = 3f;
+    [Space(15)]
+    [SerializeField]
+    float remainingCountdownTime;
 
 
 
@@ -43,6 +46,8 @@ public class Projectile : MonoBehaviour
     private LayerMask enemyLayer;
     [SerializeField]
     private int scoreModifier;
+    [SerializeField]
+    private int viewerModifier = 45;
     [SerializeField]
     private BasicMovementScript enemyScript;
 
@@ -133,7 +138,10 @@ public class Projectile : MonoBehaviour
             }
             yield return null;
         }
-
+        if (endCoroutine == null)
+        {
+            endCoroutine = StartCoroutine(LeanTweenCoroutine(easeOutTime));
+        }
         rb.isKinematic = false;
         finished = true;
         isInAnimation = false;
@@ -152,6 +160,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Hit");
         if(collision.gameObject.TryGetComponent(out BasicMovementScript basicMovementScript) && collision.gameObject.layer == 12 && finished != true)
         {
             if(!basicMovementScript.isPlayer && hasTriggered == false)
@@ -159,6 +168,7 @@ public class Projectile : MonoBehaviour
                 hasTriggered = true;
              HasFinished = true;
                 scoreScript.SubscriberCount += scoreModifier;
+                scoreScript.ViewerCount = scoreScript.ViewerCount + viewerModifier;
                 enemyScript = basicMovementScript;
                 basicMovementScript.StartStunCoroutine();
                 if(endCoroutine == null)
@@ -207,6 +217,7 @@ public class Projectile : MonoBehaviour
         while (countdownTime > 0)
         {
             countdownTime -= Time.deltaTime;
+            remainingCountdownTime = countdownTime;
             if(gameObject.transform.localScale == Vector3.zero)
             {
                 newCollider.enabled = false;
