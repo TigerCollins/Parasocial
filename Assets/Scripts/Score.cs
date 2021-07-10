@@ -8,6 +8,8 @@ public class Score : MonoBehaviour
     internal GameManager game;
     [SerializeField]
     PlayerState playerState;
+    [SerializeField]
+    AudioManager audioManager;
 
     [SerializeField]
     int highestScore;
@@ -148,6 +150,10 @@ public class Score : MonoBehaviour
             {
             scoreLerpTime += Time.deltaTime / numberChangeSpeed;
                 displayScore = (int)Mathf.Lerp(previousScore, currentScore,  scoreLerpTime); //Increment the display score by 1
+            if (Time.timeScale != 0)
+            {
+                audioManager.SubscriberOneShot();
+            }
                 uiScore.text = displayScore.ToString(); //Write it to the UI
             }
 
@@ -165,6 +171,11 @@ public class Score : MonoBehaviour
         {
             viewerLerpTime += Time.deltaTime / numberChangeSpeed;
             int newValue = (int)Mathf.Lerp(previousViewers, ViewerCount, viewerLerpTime);
+            if(Time.timeScale != 0)
+            {
+                audioManager.ViewerOneShot();
+            }
+            
             viewerCountText.text = newValue.ToString();
         }
 

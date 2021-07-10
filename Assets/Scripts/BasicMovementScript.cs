@@ -8,6 +8,7 @@ using UnityEngine.InputSystem; //Relates to the new input system and not the def
 [RequireComponent(typeof(CharacterController))]
 public class BasicMovementScript : MonoBehaviour
 {
+  
     [SerializeField]
     Score score;
     [SerializeField]
@@ -79,7 +80,12 @@ public class BasicMovementScript : MonoBehaviour
     AudioClip jumpNoise;
     [SerializeField]
     float walkFrequency;
+    [SerializeField]
     float walkProgress;
+    [SerializeField]
+    AudioSource footStepsAudioSource;
+    readonly float baseAudioMultiplier = 1;
+    float currentAudioMultiplier;
 
     [Header("None Player")]
     [SerializeField]
@@ -134,6 +140,7 @@ public class BasicMovementScript : MonoBehaviour
         AwakeGravity();
       ///  Cursor.lockState = CursorLockMode.Locked;
         SprintSetup();
+        currentAudioMultiplier = baseAudioMultiplier;
         if(!isPlayer && basicAI.useNavMeshOn)
         {
             basicAI.navMeshAgent.SetDestination(basicAI.moveToTarget.position);
@@ -141,6 +148,36 @@ public class BasicMovementScript : MonoBehaviour
             originalSpeed = basicAI.navMeshAgent.speed;
         }
     }
+
+
+    public void FootSteps()
+    {
+        if (_movementControl.moveAxis != Vector2.zero)
+        {
+            if (walkProgress <= walkFrequency && jumpDetails.isGrounded)
+            {
+                walkProgress += Time.deltaTime * currentAudioMultiplier * actualSprintMultipler;
+            }
+
+            else if (walkProgress >= walkFrequency && jumpDetails.isGrounded)
+            {
+                footStepsAudioSource.clip = footstepNoise;
+                footStepsAudioSource.pitch = Random.Range(minPitch, maxPitch);
+                footStepsAudioSource.Play();
+                walkProgress = 0;
+            }
+        }
+    }
+
+    public void Jump()
+    {
+            footStepsAudioSource.Stop();
+            footStepsAudioSource.pitch = 1;
+            footStepsAudioSource.clip = jumpNoise;
+            footStepsAudioSource.Play();
+     
+    }
+
 
     private void OnCollisionEnter(Collision hit)
         
@@ -293,8 +330,9 @@ public class BasicMovementScript : MonoBehaviour
         CheckGrounded();
         FOVLerp();
         ReticleRaycast();
+        FootSteps();
+        AdjustLookVectorChill();
 
-       
 
         if (isPlayer && enemyDistance > distanceScoreThreshold)
         {
@@ -450,37 +488,44 @@ public class BasicMovementScript : MonoBehaviour
         if (_controlType == ControlTypeEnum.FirstPerson && Time.timeScale != 0)
         {
             _firstPersonControl.lookAxis = context.ReadValue<Vector2>();  //Mainly for debugging. You can place Context.ReadValue directly into the Movement argument if desired.
-            _horizontalLookAxis += (_firstPersonControl.xSensitivity / 10) * _firstPersonControl.lookAxis.x;
-            
-            float newVerticalLookAxis = _verticalLookAxis + ((_firstPersonControl.ySensitivity / 10) * _firstPersonControl.lookAxis.y);
-            _verticalLookAxis = Mathf.Clamp(newVerticalLookAxis, _firstPersonControl.yAxis.bottomClamp, _firstPersonControl.yAxis.topClamp);
-            // CameraTilter();
-            if (_firstPersonControl.yAxis.invertY)
-            {
-                _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(_verticalLookAxis, 0, 0);
-                _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
-                
-            }
-
-            else
-            {
-                _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(-_verticalLookAxis, 0, 0);
-                _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
-          
-
-            }
+           
            // transform.Rotate(Vector3.up * _firstPersonControl.lookAxis.x);
         }
     }
 
-    
+    void AdjustLookVectorChill()
+    {
+        _horizontalLookAxis += (_firstPersonControl.xSensitivity / 10) * _firstPersonControl.lookAxis.x;
+
+        float newVerticalLookAxis = _verticalLookAxis + ((_firstPersonControl.ySensitivity / 10) * _firstPersonControl.lookAxis.y);
+        _verticalLookAxis = Mathf.Clamp(newVerticalLookAxis, _firstPersonControl.yAxis.bottomClamp, _firstPersonControl.yAxis.topClamp);
+        // CameraTilter();
+        if (_firstPersonControl.yAxis.invertY)
+        {
+            _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(_verticalLookAxis, 0, 0);
+            _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
+
+        }
+
+        else
+        {
+            _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(-_verticalLookAxis, 0, 0);
+            _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
+
+
+        }
+    }
+
+
+
 
     public void JumpFunction(InputAction.CallbackContext callbackContext)
     {
         if(jumpDetails.canJump && callbackContext.performed && jumpDetails.isGrounded && !hasJumped && Time.timeScale != 0)
         {
             hasJumped = true;
-            if(_gravitySettings.useCustomGravity)
+            Jump();
+            if (_gravitySettings.useCustomGravity)
             {
                 velocity.y = Mathf.Sqrt(jumpDetails.jumpHeight * -2f * gravity);
 
@@ -576,7 +621,7 @@ public class BasicMovementScript : MonoBehaviour
             if (_raycast.useRaycast && _controlType == ControlTypeEnum.FirstPerson && playerState.DeathState == false)
             {
                 Ray ray;
-                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
                 if (Physics.Raycast(ray, out hit, _raycast.raycastDistance))
                 {
                     if (hit.collider.gameObject.TryGetComponent(out NavMeshAgent enemy) && hit.transform != gameObject.transform)

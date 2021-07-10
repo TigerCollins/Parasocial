@@ -30,6 +30,17 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     string[] qualitySettingNames;
 
+
+    [Header("FirstReferences Settings")]
+
+    [SerializeField] GameObject playmodeButton;
+    [SerializeField] GameObject mainMenuButton;
+    [SerializeField] GameObject audioButton;
+    [SerializeField] GameObject settingsButton;
+    [SerializeField] GameObject tutorialButton;
+    [SerializeField] GameObject controlsButton;
+    [SerializeField] GameObject gameoverButton;
+
     [Header("Menu References")]
     [SerializeField]
     TextMeshProUGUI startGameText;
@@ -52,6 +63,8 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField]
     CanvasGroup controlsGroup;
+    [SerializeField]
+    CanvasGroup gameOverGroup;
 
     [Space(5)]
 
@@ -81,11 +94,23 @@ public class MenuManager : MonoBehaviour
         if (PlayerPrefs.GetInt("TimesPlayedInt") == 0)
         {
             SetGraphicsOption(2);
-            PlayerPrefs.GetInt("TimesPlayedInt", 1);
+            playerScript._firstPersonControl.yAxis.invertY = false;
+            PlayerPrefs.SetInt("InvertY", 0);
+            PlayerPrefs.SetInt("TimesPlayedInt", 1);
         }
 
 
         SetGraphicsOption(PlayerPrefs.GetInt("QualityInt"));
+        if(PlayerPrefs.GetInt("InvertY") == 0)
+        {
+            playerScript._firstPersonControl.yAxis.invertY = false;
+        }
+
+        else
+        {
+            playerScript._firstPersonControl.yAxis.invertY = true;
+        }
+       
 
 
         SetGamestateEnum("MainMenu");
@@ -139,6 +164,7 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 0;
                 settingsDarkGroup.blocksRaycasts = false;
                 settingsDarkGroup.interactable = false;
+                SetFirstSelected(playmodeButton);
                 break;
             case MenuState.PauseMenu:
                 menuGroup.alpha = 1;
@@ -167,6 +193,7 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 0;
                 settingsDarkGroup.blocksRaycasts = false;
                 settingsDarkGroup.interactable = false;
+                SetFirstSelected(mainMenuButton);
                 break;
             case MenuState.MainMenu:
                 menuGroup.alpha = 1;
@@ -195,6 +222,7 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 0;
                 settingsDarkGroup.blocksRaycasts = false;
                 settingsDarkGroup.interactable = false;
+                SetFirstSelected(mainMenuButton);
                 break;
             case MenuState.GraphicsSettings:
                 menuGroup.alpha = 1;
@@ -221,6 +249,7 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 1;
                 settingsDarkGroup.blocksRaycasts = true;
                 settingsDarkGroup.interactable = true;
+                SetFirstSelected(settingsButton);
                 break;
             case MenuState.AudioSettings:
                 menuGroup.alpha = 1;
@@ -247,6 +276,7 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 0;
                 settingsDarkGroup.blocksRaycasts = false;
                 settingsDarkGroup.interactable = false;
+                SetFirstSelected(audioButton);
                 break;
             case MenuState.Tutorial:
                 menuGroup.alpha = 0;
@@ -273,6 +303,7 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 0;
                 settingsDarkGroup.blocksRaycasts = false;
                 settingsDarkGroup.interactable = false;
+                SetFirstSelected(tutorialButton);
                 break;
             case MenuState.Controls:
                 menuGroup.alpha = 0;
@@ -299,6 +330,7 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 0;
                 settingsDarkGroup.blocksRaycasts = false;
                 settingsDarkGroup.interactable = false;
+                SetFirstSelected(controlsButton);
                 break;
             case MenuState.GameOver:
                 menuGroup.alpha = 0;
@@ -325,6 +357,9 @@ public class MenuManager : MonoBehaviour
                 settingsDarkGroup.alpha = 0;
                 settingsDarkGroup.blocksRaycasts = false;
                 settingsDarkGroup.interactable = false;
+                gameOverGroup.interactable = true;
+                gameOverGroup.blocksRaycasts = true;
+                SetFirstSelected(gameoverButton);
                 break;
             default:
                 break;
@@ -488,7 +523,7 @@ public class MenuManager : MonoBehaviour
 #endif
         }
 
-        else if(menuState == MenuState.PauseMenu)
+        else if(menuState == MenuState.PauseMenu || menuState == MenuState.GameOver)
         {
             loadingGroup.alpha = 1;
             loadingGroup.blocksRaycasts = true;
