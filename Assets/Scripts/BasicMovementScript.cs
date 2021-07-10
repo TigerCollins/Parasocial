@@ -495,25 +495,29 @@ public class BasicMovementScript : MonoBehaviour
 
     void AdjustLookVectorChill()
     {
-        _horizontalLookAxis += (_firstPersonControl.xSensitivity / 10) * _firstPersonControl.lookAxis.x;
-
-        float newVerticalLookAxis = _verticalLookAxis + ((_firstPersonControl.ySensitivity / 10) * _firstPersonControl.lookAxis.y);
-        _verticalLookAxis = Mathf.Clamp(newVerticalLookAxis, _firstPersonControl.yAxis.bottomClamp, _firstPersonControl.yAxis.topClamp);
-        // CameraTilter();
-        if (_firstPersonControl.yAxis.invertY)
+        if(isPlayer)
         {
-            _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(_verticalLookAxis, 0, 0);
-            _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
+            _horizontalLookAxis += (_firstPersonControl.xSensitivity / 10) * _firstPersonControl.lookAxis.x;
 
+            float newVerticalLookAxis = _verticalLookAxis + ((_firstPersonControl.ySensitivity / 10) * _firstPersonControl.lookAxis.y);
+            _verticalLookAxis = Mathf.Clamp(newVerticalLookAxis, _firstPersonControl.yAxis.bottomClamp, _firstPersonControl.yAxis.topClamp);
+            // CameraTilter();
+            if (_firstPersonControl.yAxis.invertY)
+            {
+                _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(_verticalLookAxis, 0, 0);
+                _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
+
+            }
+
+            else
+            {
+                _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(-_verticalLookAxis, 0, 0);
+                _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
+
+
+            }
         }
-
-        else
-        {
-            _firstPersonControl.firstPersonCamera.transform.localEulerAngles = new Vector3(-_verticalLookAxis, 0, 0);
-            _firstPersonControl.firstPersonCamera.transform.parent.transform.localEulerAngles = new Vector3(0, _horizontalLookAxis, 0);
-
-
-        }
+       
     }
 
 
@@ -649,7 +653,7 @@ public class BasicMovementScript : MonoBehaviour
                 if (_controlType == ControlTypeEnum.FirstPerson)
                 {
                     Ray ray;
-                    ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
                     if (Physics.Raycast(ray, out hit, _raycast.raycastDistance) && context.performed)
                     {
                         if (hit.collider && hit.collider.gameObject.layer != raycastIgnore1 && hit.collider.gameObject.layer != raycastIgnore2)
