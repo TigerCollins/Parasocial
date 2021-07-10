@@ -28,6 +28,7 @@ public class BasicMovementScript : MonoBehaviour
     EnemyAnimation enemyAnimationScript;
     [SerializeField]
     float distanceScoreThreshold;
+    public float enemyDistance;
 
     /// <summary>
     /// Visible to inspector
@@ -65,7 +66,20 @@ public class BasicMovementScript : MonoBehaviour
     public RaycastDetails _raycast;
     [SerializeField]
     private float _pushPower;
-    
+
+
+    [Header("Audio Settings")]
+    [SerializeField]
+    float minPitch;
+    [SerializeField]
+    float maxPitch;
+    [SerializeField]
+    AudioClip footstepNoise;
+    [SerializeField]
+    AudioClip jumpNoise;
+    [SerializeField]
+    float walkFrequency;
+    float walkProgress;
 
     [Header("None Player")]
     [SerializeField]
@@ -280,13 +294,17 @@ public class BasicMovementScript : MonoBehaviour
         FOVLerp();
         ReticleRaycast();
 
-        if(isPlayer && Vector3.Distance(enemyPos.position, gameObject.transform.position) > distanceScoreThreshold)
+       
+
+        if (isPlayer && enemyDistance > distanceScoreThreshold)
         {
+            enemyDistance = Vector3.Distance(enemyPos.position, gameObject.transform.position);
             score.HowFar = true;
         }
 
-        else if(isPlayer && Vector3.Distance(enemyPos.position, gameObject.transform.position) < distanceScoreThreshold)
+        else if(isPlayer && enemyDistance < distanceScoreThreshold)
         {
+            enemyDistance = Vector3.Distance(enemyPos.position, gameObject.transform.position);
             score.HowFar = false;
         }
 
@@ -561,7 +579,7 @@ public class BasicMovementScript : MonoBehaviour
                 ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out hit, _raycast.raycastDistance))
                 {
-                    if (hit.collider.gameObject.TryGetComponent(out NavMeshAgent enemy))
+                    if (hit.collider.gameObject.TryGetComponent(out NavMeshAgent enemy) && hit.transform != gameObject.transform)
                     {
                         ReticleState(true);
                     }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23147111848960612}
   m_Layer: 0
   m_Name: SM_Tree_Generic_Giant_01_LOD_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 23592451605823296}
   m_Layer: 0
   m_Name: SM_Tree_Generic_Giant_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 136906618729676680}
   m_Layer: 0
   m_Name: SM_Tree_Generic_Giant_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

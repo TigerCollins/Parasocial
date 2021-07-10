@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23459189188711506}
   m_Layer: 0
   m_Name: SM_Tree_Birch_Dead_01_LOD_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 136271319220045978}
   m_Layer: 0
   m_Name: SM_Tree_Birch_Dead_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 23106147616412444}
   m_Layer: 0
   m_Name: SM_Tree_Birch_Dead_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

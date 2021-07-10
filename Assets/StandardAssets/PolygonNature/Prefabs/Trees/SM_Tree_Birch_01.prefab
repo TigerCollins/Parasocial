@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 136412677017629540}
   m_Layer: 0
   m_Name: SM_Tree_Birch_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 23871021364675924}
   m_Layer: 0
   m_Name: SM_Tree_Birch_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 23416940830573446}
   m_Layer: 0
   m_Name: SM_Tree_Birch_01_LOD_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

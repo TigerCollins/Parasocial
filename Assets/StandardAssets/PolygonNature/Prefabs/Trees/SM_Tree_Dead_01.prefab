@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23651753748335570}
   m_Layer: 0
   m_Name: SM_Tree_Dead_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 23746902344633924}
   m_Layer: 0
   m_Name: SM_Tree_Dead_01_LOD_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 205210494759002832}
   m_Layer: 0
   m_Name: SM_Tree_Dead_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

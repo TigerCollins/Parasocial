@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 136552055106880642}
   m_Layer: 0
   m_Name: SM_Tree_Willow_Small_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

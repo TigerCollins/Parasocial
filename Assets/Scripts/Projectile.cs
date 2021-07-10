@@ -16,6 +16,19 @@ public class Projectile : MonoBehaviour
 
     [SerializeField]
     private Score scoreScript;
+    [Header("Audio Settings")]
+    [SerializeField]
+    float minPitch;
+    [SerializeField]
+    float maxPitch;
+    [SerializeField]
+    AudioSource thisAudio;
+    [SerializeField]
+    AudioClip treeCollision;
+    [SerializeField]
+    AudioClip waterCollision;
+    [SerializeField]
+    AudioClip terrainCollision;
 
     [Header("Throw Settings")]
     public ThrowObject throwObjectScript;
@@ -190,7 +203,34 @@ public class Projectile : MonoBehaviour
             {
                 endCoroutine = StartCoroutine(LeanTweenCoroutine(easeOutTime));
             }
+            thisAudio.pitch = Random.Range(minPitch, maxPitch);
             //  hasTriggered = true;
+            if (collision.gameObject.CompareTag("Tree"))
+            {
+                Debug.Log(collision.gameObject.name);
+                Debug.Log("Tree Audio Played");
+              
+                thisAudio.PlayOneShot(treeCollision);
+            }
+
+            else if(collision.gameObject.CompareTag("Terrain"))
+            {
+                Debug.Log("Terrain Audio Played");
+                thisAudio.PlayOneShot(terrainCollision);
+            }
+
+            else if (collision.gameObject.CompareTag("Water"))
+            {
+                Debug.Log("Water Audio Played");
+                thisAudio.PlayOneShot(waterCollision);
+            }
+
+            else
+            {
+                Debug.Log("Terrain Audio Played");
+                thisAudio.PlayOneShot(terrainCollision);
+            }
+
         }
 
     }
